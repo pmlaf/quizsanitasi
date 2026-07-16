@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz - Dari Rumah untuk Bumi</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="page">
+    <div class="decor-dots"><span></span><span></span><span></span></div>
+    <h1 id="greeting">Halo!</h1>
+    <p class="subtitle">Jawab semua soal dengan jujur ya, lalu klik Selesai untuk melihat skormu.</p>
+
+    <div class="progress-bar"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+
+    <div class="card">
+      <form id="quizForm"></form>
+    </div>
+
+    <div class="nav-row">
+      <a href="index.html" class="btn secondary">Batal</a>
+      <button id="submitBtn" disabled>Selesai &amp; Lihat Skor</button>
+    </div>
+  </div>
+
+  <script src="js/questions.js"></script>
+  <script>
+    const playerName = sessionStorage.getItem("dr4b_player_name");
+    if (!playerName) {
+      window.location.href = "index.html";
+    }
+    document.getElementById("greeting").innerHTML = "Semangat, <span class='accent'>" + escapeHtml(playerName) + "</span>!";
+
+    function escapeHtml(str) {
+      const div = document.createElement("div");
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function shuffle(array) {
+      const arr = array.slice();
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    // Acak urutan soal, lalu acak urutan opsi tiap soal (sambil tetap ingat opsi mana yang benar)
+    const shuffledQuestions = shuffle(QUESTION_BANK).map((q) => {
+      const optionsWithIndex = q.options.map((text, idx) => ({ text, isCorrect: idx === q.answer }));
+      const shuffledOptions = shuffle(optionsWithIndex);
+      return {
+        question: q.question,
+        options: shuffledOptions
+      };
+    });
+
+    const form = document.getElementById("quizForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const progressFill = document.getElementById("progressFill");
+
+    shuffledQuestions.forEach((q, qIndex) => {
+      const block = document.createElement("div");
+      block.style.marginBottom = "28px";
+
+      const numberEl = document.createElement("div");
+      numberEl.className = "question-number";
+      numberEl.textContent = "Soal " + (qIndex + 1) + " dari " + shuffledQuestions.length;
+
+      const textEl = document.createElement("div");
+      textEl.className = "question-text";
+      textEl.textContent = q.question;
+
+      const optionsEl = document.createElement("div");
+      optionsEl.className = "options";
+
+      q.options.forEach((opt, oIndex) => {
+        const label = document.createElement("label");
+        label.className = "option-label";
+
+        const radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = "q" + qIndex;
+        radio.value = oIndex;
+        radio.addEventListener("change", () => {
+          optionsEl.querySelectorAll(".option-label").forEach((l) => l.classList.remove("selected"));
+          label.classList.add("selected");
+          updateProgress();
+        });
+
+        const span = document.createElement("span");
+        span.textContent = opt.text;
+
+        label.appendChild(radio);
+        label.appendChild(span);
+        optionsEl.appendChild(label);
+      });
+
+      block.appendChild(numberEl);
+      block.appendChild(textEl);
+      block.appendChild(optionsEl);
+      form.appendChild(block);
+    });
+
+    function updateProgress() {
+      const answered = shuffledQuestions.filter((_, i) => form.querySelector('input[name="q' + i + '"]:checked')).length;
+      const pct = Math.round((answered / shuffledQuestions.length) * 100);
+      progressFill.style.width = pct + "%";
+      submitBtn.disabled = answered !== shuffledQuestions.length;
+      submitBtn.textContent = answered === shuffledQuestions.length
+        ? "Selesai & Lihat Skor"
+        : "Selesai & Lihat Skor (" + answered + "/" + shuffledQuestions.length + ")";
+    }
+
+    document.getElementById("submitBtn").addEventListener("click", async () => {
+      let score = 0;
+      shuffledQuestions.forEach((q, qIndex) => {
+        const checked = form.querySelector('input[name="q' + qIndex + '"]:checked');
+        if (checked && q.options[parseInt(checked.value, 10)].isCorrect) {
+          score++;
+        }
+      });
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Menyimpan...";
+
+      const result = await saveScore(playerName, score, shuffledQuestions.length);
+      sessionStorage.setItem("dr4b_last_result", JSON.stringify(result));
+      window.location.href = "result.html";
+    });
+  </script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

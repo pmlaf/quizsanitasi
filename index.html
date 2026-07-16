@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dari Rumah untuk Bumi - Quiz</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="page">
+    <div class="decor-dots"><span></span><span></span><span></span></div>
+    <h1>Dari Rumah untuk <b>Bumi</b></h1>
+    <p class="subtitle">Satu langkah kecil, peduli lingkungan dimulai dari keluarga.<br>Quiz Tim KKN UMK 2026 - 2027</p>
+
+    <div class="material-box">
+      <strong>Tahukah kamu?</strong>
+      <p style="margin-bottom:0">
+        Setiap rumah menghasilkan sampah setiap hari, mulai dari sisa memasak,
+        kemasan makanan, botol minuman, hingga kardus bekas. Jika tidak dikelola
+        dengan baik, sampah dapat menumpuk dan mencemari lingkungan. Yuk uji
+        pemahamanmu tentang pengelolaan sampah rumah tangga lewat quiz singkat ini!
+      </p>
+    </div>
+
+    <div class="card">
+      <div id="error" class="error" style="display:none">Mohon isi nama terlebih dahulu.</div>
+      <label for="nameInput">Masukkan Nama Kamu</label>
+      <input type="text" id="nameInput" placeholder="Contoh: Ibu Sari" maxlength="40" autocomplete="off">
+      <button id="startBtn">Mulai Quiz</button>
+      <p class="small-note">12 soal pilihan ganda • Soal &amp; jawaban diacak setiap kali kamu mulai • Tidak perlu login</p>
+    </div>
+
+    <p class="footer-note">
+      <a href="admin.html" style="color:#999;">Halaman Admin</a>
+    </p>
+  </div>
+
+  <script>
+    const nameInput = document.getElementById("nameInput");
+    const startBtn = document.getElementById("startBtn");
+    const errorBox = document.getElementById("error");
+
+    function start() {
+      const name = nameInput.value.trim();
+      if (!name) {
+        errorBox.style.display = "block";
+        nameInput.focus();
+        return;
+      }
+      sessionStorage.setItem("dr4b_player_name", name);
+      window.location.href = "quiz.html";
+    }
+
+    startBtn.addEventListener("click", start);
+    nameInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") start();
+    });
+  </script>
+</body>
+</html>

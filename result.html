@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hasil Quiz - Dari Rumah untuk Bumi</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="page">
+    <div class="decor-dots"><span></span><span></span><span></span></div>
+    <h1>Hasil Quiz</h1>
+    <p class="subtitle">Terima kasih sudah ikut peduli lingkungan bersama kami 🌱</p>
+
+    <div class="card">
+      <div class="score-hero">
+        <div id="playerName" style="font-weight:600;font-size:1.1rem;"></div>
+        <div class="score-number" id="scoreNumber">0/0</div>
+        <div class="score-sub" id="scoreMessage"></div>
+      </div>
+    </div>
+
+    <div class="material-box" id="quoteBox">
+      <strong>"Satu Langkah Kecil, Peduli Lingkungan Dimulai dari Keluarga."</strong>
+      <p style="margin-bottom:0">Mari bersama menciptakan rumah yang bersih, lingkungan yang nyaman, dan bumi yang lebih sehat.</p>
+    </div>
+
+    <div class="nav-row">
+      <a href="index.html" class="btn secondary">Kembali ke Beranda</a>
+      <a href="quiz.html" class="btn">Coba Lagi</a>
+    </div>
+  </div>
+
+  <script>
+    const raw = sessionStorage.getItem("dr4b_last_result");
+    if (!raw) {
+      window.location.href = "index.html";
+    } else {
+      const result = JSON.parse(raw);
+      document.getElementById("playerName").textContent = result.name;
+      document.getElementById("scoreNumber").textContent = result.score + " / " + result.total;
+
+      let message;
+      if (result.percentage >= 90) {
+        message = "Luar biasa! Kamu sangat paham pengelolaan sampah rumah tangga. 🌟";
+      } else if (result.percentage >= 70) {
+        message = "Bagus sekali! Pemahamanmu tentang lingkungan sudah baik. 👍";
+      } else if (result.percentage >= 50) {
+        message = "Lumayan! Yuk pelajari lagi materinya agar makin peduli lingkungan. 🌿";
+      } else {
+        message = "Jangan menyerah! Coba baca lagi materinya, lalu ulangi quiz-nya ya. 💪";
+      }
+      document.getElementById("scoreMessage").textContent = "Skor: " + result.percentage + "% - " + message;
+    }
+  </script>
+</body>
+</html>
