@@ -5,4 +5,4 @@
 // Untuk keamanan yang lebih kuat, gunakan Firebase Authentication
 // atau batasi akses halaman ini secara terpisah (misalnya tidak disebarkan link-nya).
 
-const ADMIN_PASSWORD = "kkn2026";
+const ADMIN_PASSWORD = "kknUMK";
