@@ -23,10 +23,10 @@
 // =========================================================================
 
 const firebaseConfig = {
-  apiKey: "GANTI_DENGAN_API_KEY",
-  authDomain: "GANTI_DENGAN_PROJECT.firebaseapp.com",
-  projectId: "GANTI_DENGAN_PROJECT_ID",
-  storageBucket: "GANTI_DENGAN_PROJECT.appspot.com",
-  messagingSenderId: "GANTI_DENGAN_SENDER_ID",
-  appId: "GANTI_DENGAN_APP_ID"
+  apiKey: "AIzaSyBot999xtUsNrZA6eL7_4xPnxPFb2xscyc",
+  authDomain: "quizsanitasi.firebaseapp.com",
+  projectId: "quizsanitasi",
+  storageBucket: "quizsanitasi.firebasestorage.app",
+  messagingSenderId: "470538815531",
+  appId: "1:470538815531:web:672ce91a3a97200afdc26e"
 };
